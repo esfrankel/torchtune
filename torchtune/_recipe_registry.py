@@ -83,6 +83,7 @@ _ALL_RECIPES = [
             Config(name="qwen2/7B_full", file_path="qwen2/7B_full.yaml"),
             Config(name="qwen2/0.5B_full", file_path="qwen2/0.5B_full.yaml"),
             Config(name="qwen2/1.5B_full", file_path="qwen2/1.5B_full.yaml"),
+            Config(name="llama3/dcft-sft", file_path="llama3/dcft-sft.yaml"),
         ],
         supports_distributed=True,
     ),
@@ -199,6 +200,17 @@ _ALL_RECIPES = [
             Config(
                 name="llama2/7B_lora_dpo",
                 file_path="llama2/7B_lora_dpo.yaml",
+            ),
+        ],
+        supports_distributed=True,
+    ),
+    Recipe(
+        name="dcft_dpo_distributed",
+        file_path="dcft_dpo_distributed.py",
+        configs=[
+            Config(
+                name="llama3/dcft-dpo",
+                file_path="llama3/dcft-dpo.yaml",
             ),
         ],
         supports_distributed=True,

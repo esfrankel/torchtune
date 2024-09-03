@@ -1,0 +1,66 @@
+# Model Arguments
+model:
+  _component_: torchtune.models.llama3.llama3_8b
+
+# Tokenizer
+tokenizer:
+  _component_: torchtune.models.llama3.llama3_tokenizer
+  path: /tmp/Meta-Llama-3-8B-Instruct-DPO/original/tokenizer.model
+  max_seq_len: 2048
+
+checkpointer:
+  _component_: torchtune.training.FullModelHFCheckpointer
+  checkpoint_dir:  /tmp/Meta-Llama-3-8B-Instruct-DPO
+  checkpoint_files: [
+    model-00001-of-00004.safetensors,
+    model-00002-of-00004.safetensors,
+    model-00003-of-00004.safetensors,
+    model-00004-of-00004.safetensors
+  ]
+  recipe_checkpoint: null
+  output_dir:  /tmp/Meta-Llama-3-8B-Instruct-DPO
+  model_type: LLAMA3
+resume_from_checkpoint: False
+
+# Dataset and Sampler
+dataset:
+  _component_: torchtune.datasets.ultrafeedback_dataset
+
+seed: 42
+shuffle: True
+
+# Fine-tuning arguments
+batch_size: 8
+epochs: 1
+compile: False
+
+optimizer:
+  _component_: torch.optim.AdamW
+  lr: 2e-5
+  foreach: False
+
+loss:
+  _component_: torchtune.modules.rlhf.loss.DPOLoss
+  beta: 0.1
+  label_smoothing: 0
+
+max_steps_per_epoch: null
+gradient_accumulation_steps: 1
+
+# Training env
+device: cuda
+
+# Memory management
+enable_activation_checkpointing: True
+memory_efficient_fsdp_wrap: True
+
+# Reduced precision
+dtype: bf16
+
+# Logging
+metric_logger:
+  _component_: torchtune.training.metric_logging.WandBLogger
+  project: torchtune
+output_dir:  /tmp/llama3-dpo
+log_every_n_steps: 1
+log_peak_memory_stats: False
