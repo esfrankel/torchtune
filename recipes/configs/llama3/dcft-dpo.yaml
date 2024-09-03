@@ -20,6 +20,7 @@ checkpointer:
   recipe_checkpoint: null
   output_dir:  /tmp/Meta-Llama-3-8B-Instruct-DPO
   model_type: LLAMA3
+  safe_serialization: True
 resume_from_checkpoint: False
 
 # Dataset and Sampler
