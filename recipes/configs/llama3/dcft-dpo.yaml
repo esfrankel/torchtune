@@ -26,12 +26,17 @@ resume_from_checkpoint: False
 # Dataset and Sampler
 dataset:
   _component_: torchtune.datasets.ultrafeedback_dataset
+  source: argilla/ultrafeedback-binarized-preferences
+  column_map:
+    prompt: instruction
+    chosen: chosen_response
+    rejected: rejected_response
 
 seed: 42
 shuffle: True
 
 # Fine-tuning arguments
-batch_size: 8
+batch_size: 4
 epochs: 1
 compile: False
 
@@ -39,6 +44,9 @@ optimizer:
   _component_: torch.optim.AdamW
   lr: 2e-5
   foreach: False
+lr_scheduler:
+  _component_: torchtune.modules.get_cosine_schedule_with_warmup
+  num_warmup_steps: 100
 
 loss:
   _component_: torchtune.modules.rlhf.loss.DPOLoss
@@ -46,7 +54,7 @@ loss:
   label_smoothing: 0
 
 max_steps_per_epoch: null
-gradient_accumulation_steps: 1
+gradient_accumulation_steps: 2
 
 # Training env
 device: cuda

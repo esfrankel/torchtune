@@ -62,6 +62,9 @@ optimizer:
   _component_: torch.optim.AdamW
   lr: 2e-5
   foreach: False
+lr_scheduler:
+  _component_: torchtune.modules.get_cosine_schedule_with_warmup
+  num_warmup_steps: 100
 
 loss:
   _component_: torch.nn.CrossEntropyLoss
